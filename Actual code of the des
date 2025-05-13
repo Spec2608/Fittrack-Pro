@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitTrack Pro - Your Personal Fitness Companion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        secondary: '#10B981',
+                        accent: '#F59E0B',
+                        dark: '#1F2937',
+                        light: '#F3F4F6'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.5s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #4F46E5 0%, #10B981 100%);
+        }
+        .shadow-custom {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-dumbbell text-primary text-2xl mr-2"></i>
+                        <span class="text-xl font-bold text-dark">FitTrack Pro</span>
+                    </div>
+                </div>
+                <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+                    <a href="#" class="text-primary font-medium px-3 py-2 rounded-md text-sm">Dashboard</a>
+                    <a href="#" class="text-gray-500 hover:text-dark font-medium px-3 py-2 rounded-md text-sm">Nutrition</a>
+                    <a href="#" class="text-gray-500 hover:text-dark font-medium px-3 py-2 rounded-md text-sm">Workouts</a>
+                    <a href="#" class="text-gray-500 hover:text-dark font-medium px-3 py-2 rounded-md text-sm">Rewards</a>
+                    <a href="#" class="text-gray-500 hover:text-dark font-medium px-3 py-2 rounded-md text-sm">Leaderboard</a>
+                </div>
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <button class="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <i class="fas fa-user mr-2"></i>
+                            <span>Profile</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Welcome Banner -->
+        <div class="gradient-bg rounded-xl p-6 text-white shadow-custom mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                <div>
+                    <h1 class="text-2xl font-bold mb-2">Welcome back, Alex!</h1>
+                    <p class="opacity-90">You've earned 450 points this week. Keep going to unlock new rewards!</p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <button class="bg-white text-primary font-medium px-4 py-2 rounded-md hover:bg-opacity-90 transition">
+                        <i class="fas fa-gift mr-2"></i> Redeem Rewards
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- BMI Calculator -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-lg font-semibold text-dark">BMI & Calorie Calculator</h2>
+                        <button id="calculateBtn" class="bg-primary text-white px-4 py-2 rounded-md text-sm hover:bg-indigo-700 transition">
+                            Calculate
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Height (cm)</label>
+                                <input type="number" id="height" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="175">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Weight (kg)</label>
+                                <input type="number" id="weight" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="70">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Age</label>
+                                <input type="number" id="age" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" placeholder="30">
+                            </div>
+                        </div>
+                        <div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Activity Level</label>
+                                <select id="activity" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                                    <option value="1.2">Sedentary (little or no exercise)</option>
+                                    <option value="1.375">Lightly active (light exercise 1-3 days/week)</option>
+                                    <option value="1.55" selected>Moderately active (moderate exercise 3-5 days/week)</option>
+                                    <option value="1.725">Very active (hard exercise 6-7 days/week)</option>
+                                    <option value="1.9">Extra active (very hard exercise & physical job)</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Goal</label>
+                                <select id="goal" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                                    <option value="-500">Lose weight (aggressive)</option>
+                                    <option value="-250">Lose weight (moderate)</option>
+                                    <option value="0" selected>Maintain weight</option>
+                                    <option value="250">Gain weight (moderate)</option>
+                                    <option value="500">Gain weight (aggressive)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="results" class="hidden mt-6 p-4 bg-light rounded-lg">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="text-center">
+                                <p class="text-sm text-gray-500">Your BMI</p>
+                                <p id="bmiResult" class="text-2xl font-bold text-dark">--</p>
+                                <p id="bmiCategory" class="text-sm text-gray-500">--</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-sm text-gray-500">Daily Calories</p>
+                                <p id="caloriesResult" class="text-2xl font-bold text-dark">--</p>
+                                <p class="text-sm text-gray-500">Based on your activity</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-sm text-gray-500">Macronutrients</p>
+                                <p id="macrosResult" class="text-2xl font-bold text-dark">--</p>
+                                <p class="text-sm text-gray-500">Protein/Fats/Carbs</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nutrition Tracking -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-lg font-semibold text-dark">Today's Nutrition</h2>
+                        <button class="text-primary font-medium text-sm hover:text-indigo-700 transition">
+                            <i class="fas fa-plus mr-1"></i> Add Food
+                        </button>
+                    </div>
+                    <div class="mb-6">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-sm font-medium text-gray-700">Calories</span>
+                            <span class="text-sm font-medium text-gray-700">1,450 / 2,200 kcal</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-primary h-2.5 rounded-full" style="width: 65%"></div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium text-blue-700">Protein</span>
+                                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">35%</span>
+                            </div>
+                            <div class="text-lg font-bold text-blue-800">127g / 150g</div>
+                            <div class="w-full bg-blue-200 rounded-full h-1.5 mt-2">
+                                <div class="bg-blue-600 h-1.5 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="bg-yellow-50 p-4 rounded-lg">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium text-yellow-700">Carbs</span>
+                                <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">40%</span>
+                            </div>
+                            <div class="text-lg font-bold text-yellow-800">220g / 250g</div>
+                            <div class="w-full bg-yellow-200 rounded-full h-1.5 mt-2">
+                                <div class="bg-yellow-600 h-1.5 rounded-full" style="width: 88%"></div>
+                            </div>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium text-purple-700">Fats</span>
+                                <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">25%</span>
+                            </div>
+                            <div class="text-lg font-bold text-purple-800">48g / 60g</div>
+                            <div class="w-full bg-purple-200 rounded-full h-1.5 mt-2">
+                                <div class="bg-purple-600 h-1.5 rounded-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-700 mb-3">Recent Meals</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="bg-primary bg-opacity-10 p-2 rounded-lg mr-3">
+                                        <i class="fas fa-egg text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-dark">Breakfast</p>
+                                        <p class="text-xs text-gray-500">Scrambled eggs, whole wheat toast, avocado</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-medium text-dark">450 kcal</p>
+                                    <p class="text-xs text-gray-500">35P • 40C • 20F</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="bg-secondary bg-opacity-10 p-2 rounded-lg mr-3">
+                                        <i class="fas fa-drumstick-bite text-secondary"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-dark">Lunch</p>
+                                        <p class="text-xs text-gray-500">Grilled chicken, quinoa, mixed vegetables</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-medium text-dark">600 kcal</p>
+                                    <p class="text-xs text-gray-500">55P • 50C • 15F</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="bg-accent bg-opacity-10 p-2 rounded-lg mr-3">
+                                        <i class="fas fa-apple-alt text-accent"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-dark">Snack</p>
+                                        <p class="text-xs text-gray-500">Greek yogurt with berries and almonds</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-medium text-dark">400 kcal</p>
+                                    <p class="text-xs text-gray-500">30P • 30C • 13F</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="space-y-8">
+                <!-- Points & Progress -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h2 class="text-lg font-semibold text-dark mb-6">Your Progress</h2>
+                    <div class="flex justify-center mb-6">
+                        <div class="relative w-32 h-32">
+                            <svg class="w-full h-full" viewBox="0 0 100 100">
+                                <circle class="text-gray-200" stroke-width="8" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
+                                <circle class="text-primary progress-ring__circle" stroke-width="8" stroke-linecap="round" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" stroke-dasharray="251.2" stroke-dashoffset="75.36" />
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <span class="text-2xl font-bold text-dark">1,250</span>
+                                <span class="text-xs text-gray-500">Points</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium text-gray-700">Weekly Goal</span>
+                                <span class="text-sm font-medium text-gray-700">450/500 pts</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-secondary h-2 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-sm font-medium text-gray-700">Monthly Goal</span>
+                                <span class="text-sm font-medium text-gray-700">1,250/2,000 pts</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-accent h-2 rounded-full" style="width: 62%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <button class="w-full bg-primary text-white py-2 rounded-md hover:bg-indigo-700 transition flex items-center justify-center">
+                            <i class="fas fa-trophy mr-2"></i> View Leaderboard
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recent Achievements -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h2 class="text-lg font-semibold text-dark mb-6">Recent Achievements</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="bg-yellow-100 p-2 rounded-full mr-3">
+                                <i class="fas fa-medal text-yellow-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-dark">7-Day Streak</p>
+                                <p class="text-xs text-gray-500">Logged nutrition for 7 consecutive days</p>
+                                <p class="text-xs text-primary mt-1">+50 points</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 p-2 rounded-full mr-3">
+                                <i class="fas fa-fire text-blue-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-dark">Workout Warrior</p>
+                                <p class="text-xs text-gray-500">Completed 5 workouts this week</p>
+                                <p class="text-xs text-primary mt-1">+75 points</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-green-100 p-2 rounded-full mr-3">
+                                <i class="fas fa-check-circle text-green-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-dark">Macro
+</html>
